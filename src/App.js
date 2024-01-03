@@ -26,14 +26,11 @@ function Board({ xIsNext, squares, onPlay }) {
   }
 
   const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = "Winner: " + winner;
-  } else if (squares.every((square) => square)) {
-    status = "Its a Draw!!!";
-  } else {
-    status = "Player " + (xIsNext ? "X" : "O") + "´s turn";
-  }
+  const status = winner
+    ? "Winner: " + winner
+    : squares.every((square) => square)
+    ? "It's a Draw!!!"
+    : "Player " + (xIsNext ? "X" : "O") + "'s turn";
 
   return (
     <>
@@ -82,11 +79,20 @@ export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const [playerXScore, setPlayerXScore] = useState(0);
+  const [playerOScore, setPlayerOScore] = useState(0);
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
+
+    const winner = calculateWinner(nextSquares);
+    if (winner === "X") {
+      setPlayerXScore(playerXScore + 1);
+    } else if (winner === "O") {
+      setPlayerOScore(playerOScore + 1);
+    }
   }
 
   function jumpTo(nextMove) {
@@ -111,6 +117,10 @@ export default function Game() {
 
   return (
     <div className="game">
+      <div className="game-info">
+        <div className="player-score">Player X Score: {playerXScore}</div>
+        <div className="player-score">Player O Score: {playerOScore}</div>
+      </div>
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>

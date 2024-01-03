@@ -103,3 +103,11 @@ button {
       rgb(195 231 202) 0px 0px 0px 3px;
   }
 }
+
+.player-score {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: chocolate;
+  text-align: center;
+}
